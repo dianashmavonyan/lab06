@@ -1,0 +1,62 @@
+№2 на С++
+
+
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+// Function to evaluate the objective function
+double f(const vector<double>& x) {
+    return pow(x[0], 2) + exp(pow(x[0], 2) + pow(x[1], 2)) + 4 * x[0] + 3 * x[1];
+}
+
+// Function to evaluate the gradient of the objective function
+vector<double> gradient(const vector<double>& x) {
+    vector<double> grad(2);
+    grad[0] = 2 * x[0] + 2 * x[0] * exp(pow(x[0], 2) + pow(x[1], 2)) + 4;
+    grad[1] = 2 * x[1] * exp(pow(x[0], 2) + pow(x[1], 2)) + 3;
+    return grad;
+}
+
+// Function to perform the steepest descent method
+vector<double> steepest_descent(const vector<double>& x0, double alpha, int max_iter) {
+    vector<double> x = x0;
+    for (int i = 0; i < max_iter; i++) {
+        vector<double> grad = gradient(x);
+        for (int j = 0; j < 2; j++) {
+            x[j] = x[j] - alpha * grad[j];
+        }
+    }
+    return x;
+}
+
+int main() {
+    // Initial guess
+    vector<double> x0 = {0, 0};
+
+    // Step size
+    double alpha = 0.01;
+
+    // Maximum number of iterations
+    int max_iter = 1000;
+
+    // Perform steepest descent
+    vector<double> x_opt = steepest_descent(x0, alpha, max_iter);
+
+    // Print the optimal solution
+    cout << "Optimal solution: ";
+    for (double x : x_opt) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    // Evaluate the optimal solution
+    double f_opt = f(x_opt);
+
+    // Print the optimal value
+    cout << "Optimal value: " << f_opt << endl;
+
+    return 0;
+}
