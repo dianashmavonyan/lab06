@@ -1,0 +1,46 @@
+№1 на Python
+
+
+import numpy as np
+
+def f(x):
+    return np.exp(x[0]**2 + x[1]**2) + np.log(4 + x[1]**2 + 2*x[2]**2)
+
+def gradient(x):
+    return np.array([2*x[0]*np.exp(x[0]**2 + x[1]**2), 2*x[1]*(np.exp(x[0]**2 + x[1]**2) + 1/(4 + x[1]**2 + 2*x[2]**2)), 4*x[2]*(np.exp(x[0]**2 + x[1]**2) + 1/(4 + x[1]**2 + 2*x[2]**2))])
+
+def coordinate_descent(x0, step_size, tolerance=1e-6, max_iter=1000):
+    x = x0
+    iter = 0
+    while iter < max_iter:
+        for i in range(len(x)):
+            x_old = x[i]
+            x[i] = x_old - step_size * gradient(x)[i]
+        if np.linalg.norm(x - x_old) < tolerance:
+            break
+        iter += 1
+    return x
+
+# Initial guess
+x0 = np.array([0, 0, 0])
+
+# Step size
+step_size = 0.01
+
+# Tolerance
+tolerance = 1e-6
+
+# Maximum number of iterations
+max_iter = 1000
+
+# Perform coordinate descent
+x_opt = coordinate_descent(x0, step_size, tolerance, max_iter)
+
+# Print the optimal solution
+print("Optimal solution:", x_opt)
+
+# Evaluate the optimal solution
+f_opt = f(x_opt)
+
+# Print the optimal value
+print("Optimal value:", f_opt)
